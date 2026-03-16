@@ -4,7 +4,8 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://tradesaja.vercel.app',
+  // site: 'https://tradesaja.vercel.app',
+  site: 'https://arvinfarrel.github.io/trade-saja',
   integrations: [
     tailwind({ applyBaseStyles: false }),
     mdx(),
