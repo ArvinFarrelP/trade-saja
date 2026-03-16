@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import readingTime from 'reading-time';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const featured = allPosts.filter(p => p.data.featured).slice(0, 1)[0];
+const latest   = allPosts.filter(p => !p.data.featured || p.slug !== featured?.slug).slice(0, 6);
+
+function getReadingTime(body: string) {
+  return readingTime(body).text;
+}
+---
+
+<BaseLayout
+  title="Trade Saja"
+  description="Crypto Education, Blockchain Research, and Web3 Insights. Deep-dive analysis for serious crypto researchers and enthusiasts by Arvin Farrel Pramuditya."
+>
+
+  <!-- ── HERO ── -->
+  <section class="relative overflow-hidden border-b border-border">
+    <div class="hero-glow"></div>
+    <div class="max-w-6xl mx-auto px-6 py-24 md:py-32 relative z-10">
+      <div class="animate-fade-up">
+        <span class="eyebrow mb-6 inline-flex">
+          Blockchain Research Platform
+        </span>
+      </div>
+
+      <h1 class="font-mono font-bold text-[2.75rem] sm:text-[3.5rem] lg:text-[5rem]
+                 leading-[1.08] tracking-[-0.04em] text-content-primary mb-5
+                 animate-fade-up delay-100">
+        Trade <span class="text-accent">Saja</span>
+      </h1>
+
+      <p class="text-lg text-content-secondary max-w-lg leading-relaxed mb-10
+                animate-fade-up delay-200">
+        Crypto Education, Blockchain Research, and Web3 Insights.
+        Deep-dive analysis for serious crypto researchers and enthusiasts.
+      </p>
+
+      <div class="flex flex-wrap gap-3 animate-fade-up delay-300">
+        <a href="/blog"  class="btn-primary">
+          Explore Articles
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="/about" class="btn-outline">About the Author</a>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex flex-wrap gap-10 mt-16 pt-12 border-t border-border animate-fade-up delay-400">
+        {[
+          ['12+', 'Articles'],
+          ['5+',  'Topics'],
+          ['2024','Since'],
+          ['Free','Access'],
+        ].map(([n, l]) => (
+          <div>
+            <p class="font-mono text-[1.75rem] font-bold text-content-primary tracking-tight leading-none mb-1">{n}</p>
+            <p class="font-mono text-[0.6875rem] text-content-muted uppercase tracking-widest">{l}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURED ── -->
+  {featured && (
+    <section class="border-b border-border">
+      <div class="max-w-6xl mx-auto px-6 py-16">
+        <div class="flex items-baseline justify-between mb-8">
+          <h2 class="section-title">Featured</h2>
+          <a href="/blog" class="text-xs font-mono text-accent hover:text-white transition-colors flex items-center gap-1.5 group">
+            All articles
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+
+        <!-- Featured split card -->
+        <article class="bg-bg-card border border-border rounded-xl overflow-hidden
+                        grid grid-cols-1 md:grid-cols-2 group
+                        hover:border-border-light transition-all duration-200">
+          <!-- Visual panel -->
+          <div class="relative bg-gradient-to-br from-bg-secondary to-bg-card
+                      border-b md:border-b-0 md:border-r border-border
+                      min-h-[200px] md:min-h-0 flex items-center justify-center overflow-hidden">
+            <!-- Grid pattern -->
+            <div class="absolute inset-0"
+                 style="background-image: linear-gradient(rgba(59,130,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.05) 1px, transparent 1px); background-size: 24px 24px;">
+            </div>
+            <!-- Glow blob -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-40 h-40 rounded-full"
+                   style="background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);">
+              </div>
+            </div>
+            <span class="relative text-5xl select-none opacity-40">🔐</span>
+          </div>
+
+          <!-- Content -->
+          <div class="p-8 md:p-10 flex flex-col justify-center">
+            <div class="flex items-center gap-2.5 mb-4">
+              <span class="inline-flex items-center gap-1 font-mono text-[0.6875rem] font-bold uppercase tracking-widest text-amber-400 bg-amber-400/[0.07] border border-amber-400/20 rounded px-2 py-0.5">
+                ★ Editor's Pick
+              </span>
+              <span class="category-badge">{featured.data.category}</span>
+            </div>
+
+            <h3 class="font-mono font-bold text-xl md:text-[1.35rem] leading-snug
+                       text-content-primary group-hover:text-white transition-colors mb-3">
+              <a href={`/blog/${featured.slug}`} class="stretched-link">
+                {featured.data.title}
+              </a>
+            </h3>
+
+            <p class="text-sm text-content-secondary leading-relaxed mb-6 line-clamp-3">
+              {featured.data.description}
+            </p>
+
+            <div class="meta-text">
+              <time datetime={featured.data.pubDate.toISOString()}>
+                {featured.data.pubDate.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' })}
+              </time>
+              <span class="meta-dot"></span>
+              <span>{getReadingTime(featured.body)}</span>
+              <span class="meta-dot"></span>
+              <span>{featured.data.author}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  )}
+
+  <!-- ── LATEST ── -->
+  <section class="border-b border-border">
+    <div class="max-w-6xl mx-auto px-6 py-16">
+      <div class="flex items-baseline justify-between mb-8">
+        <h2 class="section-title">Latest Articles</h2>
+        <a href="/blog" class="text-xs font-mono text-accent hover:text-white transition-colors flex items-center gap-1.5 group">
+          View all
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {latest.map(post => (
+          <ArticleCard
+            title={post.data.title}
+            description={post.data.description}
+            slug={post.slug}
+            pubDate={post.data.pubDate}
+            readingTime={getReadingTime(post.body)}
+            category={post.data.category}
+            tags={post.data.tags}
+            featured={post.data.featured}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TOPICS ── -->
+  <section>
+    <div class="max-w-6xl mx-auto px-6 py-16">
+      <h2 class="section-title mb-8">Browse by Topic</h2>
+      <div class="flex flex-wrap gap-2.5">
+        {[
+          ['🔐', 'Privacy Coins'],
+          ['⚡', 'DeFi'],
+          ['₿', 'Bitcoin'],
+          ['Ξ', 'Ethereum'],
+          ['🌐', 'Web3'],
+          ['🔗', 'Blockchain'],
+          ['🏛️', 'DAOs'],
+          ['🎮', 'NFTs'],
+          ['⚖️', 'Regulation'],
+          ['📊', 'Market Analysis'],
+        ].map(([icon, label]) => (
+          <a href="/blog"
+             class="flex items-center gap-2 font-mono text-[0.6875rem] font-bold uppercase tracking-wider
+                    text-content-muted bg-bg-secondary border border-border rounded-lg px-3.5 py-2
+                    hover:border-accent hover:text-accent hover:bg-accent/[0.05]
+                    transition-all duration-150">
+            <span>{icon}</span>
+            <span>{label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .stretched-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+</style>

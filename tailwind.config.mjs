@@ -1,0 +1,116 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      fontFamily: {
+        mono: ['"Space Mono"', 'Courier New', 'monospace'],
+        sans: ['"Sora"', 'system-ui', 'sans-serif'],
+      },
+      colors: {
+        bg: {
+          primary:   '#09090b',
+          secondary: '#0f1015',
+          card:      '#131419',
+          hover:     '#17181f',
+        },
+        border: {
+          DEFAULT: '#1c1e27',
+          light:   '#252836',
+        },
+        content: {
+          primary:   '#eaedf4',
+          secondary: '#8b93aa',
+          muted:     '#4f566b',
+        },
+        accent: {
+          DEFAULT: '#3b82f6',
+          dim:     '#2563eb',
+          glow:    'rgba(59,130,246,0.15)',
+        },
+      },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            '--tw-prose-body':        theme('colors.content.secondary'),
+            '--tw-prose-headings':    theme('colors.content.primary'),
+            '--tw-prose-links':       theme('colors.accent.DEFAULT'),
+            '--tw-prose-bold':        theme('colors.content.primary'),
+            '--tw-prose-counters':    theme('colors.accent.DEFAULT'),
+            '--tw-prose-bullets':     theme('colors.accent.DEFAULT'),
+            '--tw-prose-hr':          theme('colors.border.DEFAULT'),
+            '--tw-prose-quotes':      theme('colors.content.primary'),
+            '--tw-prose-quote-borders': theme('colors.accent.DEFAULT'),
+            '--tw-prose-captions':    theme('colors.content.muted'),
+            '--tw-prose-code':        theme('colors.accent.DEFAULT'),
+            '--tw-prose-pre-code':    theme('colors.content.secondary'),
+            '--tw-prose-pre-bg':      theme('colors.bg.secondary'),
+            '--tw-prose-th-borders':  theme('colors.border.DEFAULT'),
+            '--tw-prose-td-borders':  theme('colors.border.DEFAULT'),
+            maxWidth: '72ch',
+            fontSize: '1.0625rem',
+            lineHeight: '1.85',
+            h2: {
+              fontFamily: theme('fontFamily.mono').join(', '),
+              fontSize: '1.4rem',
+              letterSpacing: '-0.02em',
+              borderTop: `1px solid ${theme('colors.border.DEFAULT')}`,
+              paddingTop: '1.75rem',
+              marginTop: '2.5rem',
+            },
+            h3: {
+              fontFamily: theme('fontFamily.mono').join(', '),
+              fontSize: '1.1rem',
+              letterSpacing: '-0.01em',
+            },
+            'h2:first-child': { borderTop: 'none', paddingTop: '0', marginTop: '0' },
+            a: {
+              textDecoration: 'none',
+              borderBottom: `1px solid ${theme('colors.accent.DEFAULT')}`,
+              transition: 'color 0.2s',
+              '&:hover': { color: theme('colors.white') },
+            },
+            code: {
+              background: theme('colors.bg.card'),
+              border: `1px solid ${theme('colors.border.DEFAULT')}`,
+              borderRadius: '4px',
+              padding: '2px 7px',
+              fontWeight: '400',
+              '&::before': { content: '""' },
+              '&::after':  { content: '""' },
+            },
+            pre: {
+              border: `1px solid ${theme('colors.border.DEFAULT')}`,
+              borderRadius: '10px',
+            },
+            blockquote: {
+              background: 'rgba(59,130,246,0.05)',
+              borderLeftColor: theme('colors.accent.DEFAULT'),
+              borderLeftWidth: '3px',
+              borderRadius: '0 8px 8px 0',
+              padding: '0.75rem 1.25rem',
+              fontStyle: 'normal',
+              color: theme('colors.content.primary'),
+              '& p': { margin: '0' },
+            },
+            'ul > li::marker': { color: theme('colors.accent.DEFAULT') },
+            'ol > li::marker': { color: theme('colors.accent.DEFAULT'), fontFamily: theme('fontFamily.mono').join(', ') },
+            table: { fontSize: '0.9rem' },
+            'thead th': {
+              background: theme('colors.bg.secondary'),
+              fontFamily: theme('fontFamily.mono').join(', '),
+              fontSize: '0.7rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              color: theme('colors.content.muted'),
+            },
+            'tbody td': { background: theme('colors.bg.card') },
+          },
+        },
+      }),
+    },
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
+};

@@ -1,0 +1,159 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post:        CollectionEntry<'blog'>;
+  readingTime: string;
+  wordCount:   number;
+}
+
+const { post, readingTime, wordCount } = Astro.props;
+const { title, description, pubDate, updatedDate, author, tags, category, ogImage } = post.data;
+
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+const updatedFormatted = updatedDate?.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+
+// Author initials
+const initials = author.split(' ').map((n: string) => n[0]).join('').slice(0, 3).toUpperCase();
+
+const canonical = `https://tradesaja.vercel.app/blog/${post.slug}`;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={ogImage}
+  canonical={canonical}
+  type="article"
+  pubDate={pubDate}
+  author={author}
+>
+  <!-- Reading progress bar -->
+  <div id="reading-progress-bar" aria-hidden="true"></div>
+
+  <!-- Structured data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    author: { '@type': 'Person', name: author, url: 'https://tradesaja.vercel.app/about' },
+    publisher: { '@type': 'Organization', name: 'Trade Saja', url: 'https://tradesaja.vercel.app' },
+    datePublished: pubDate.toISOString(),
+    dateModified: (updatedDate ?? pubDate).toISOString(),
+    url: canonical,
+    keywords: tags.join(', '),
+    articleSection: category,
+    wordCount,
+  })} />
+
+  <!-- Article hero -->
+  <header class="border-b border-border">
+    <div class="max-w-3xl mx-auto px-6 pt-16 pb-12">
+
+      <!-- Breadcrumb -->
+      <nav class="meta-text mb-6" aria-label="Breadcrumb">
+        <a href="/"     class="hover:text-accent transition-colors">Home</a>
+        <span class="meta-dot"></span>
+        <a href="/blog" class="hover:text-accent transition-colors">Blog</a>
+        <span class="meta-dot"></span>
+        <span class="text-content-primary">{category}</span>
+      </nav>
+
+      <span class="category-badge mb-4 inline-block">{category}</span>
+
+      <h1 class="font-mono font-bold text-2xl sm:text-3xl lg:text-[2.25rem] leading-tight
+                 text-content-primary tracking-tight mb-5">
+        {title}
+      </h1>
+
+      <!-- Author + meta row -->
+      <div class="flex flex-wrap items-center gap-5 py-5 border-t border-b border-border">
+        <!-- Author chip -->
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent to-accent-dim
+                      flex items-center justify-center font-mono text-xs font-bold text-white shrink-0"
+               aria-hidden="true">
+            {initials}
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-content-primary leading-tight">{author}</p>
+            <p class="font-mono text-[0.6875rem] text-content-muted uppercase tracking-wider">Crypto Researcher</p>
+          </div>
+        </div>
+
+        <!-- Date / time -->
+        <div class="meta-text">
+          <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+          <span class="meta-dot"></span>
+          <span>{readingTime}</span>
+          <span class="meta-dot"></span>
+          <span>{wordCount.toLocaleString()} words</span>
+        </div>
+        {updatedDate && (
+          <p class="meta-text">
+            Updated: <time datetime={updatedDate.toISOString()}>{updatedFormatted}</time>
+          </p>
+        )}
+      </div>
+
+      <!-- Tags -->
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-5">
+          {tags.map(tag => <span class="tag-pill">{tag}</span>)}
+        </div>
+      )}
+    </div>
+  </header>
+
+  <!-- Article body -->
+  <div class="max-w-3xl mx-auto px-6 py-14">
+    <div class="prose prose-invert
+                prose-headings:font-mono prose-headings:tracking-tight
+                prose-p:text-content-secondary prose-p:leading-[1.85]
+                prose-a:text-accent prose-a:no-underline prose-a:border-b prose-a:border-accent/40
+                prose-strong:text-content-primary
+                prose-li:text-content-secondary
+                prose-table:w-full
+                max-w-none">
+      <slot />
+    </div>
+
+    <!-- Author bio card -->
+    <div class="mt-16 p-7 bg-bg-card border border-border rounded-xl flex gap-5 items-start">
+      <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-accent-dim
+                  flex items-center justify-center font-mono text-sm font-bold text-white shrink-0">
+        {initials}
+      </div>
+      <div>
+        <p class="font-mono font-bold text-content-primary text-sm mb-0.5">{author}</p>
+        <p class="font-mono text-[0.6875rem] text-content-muted uppercase tracking-wider mb-2.5">Cryptocurrency Researcher · Trade Saja</p>
+        <p class="text-sm text-content-secondary leading-relaxed">
+          Founder of Trade Saja. Focused on privacy technology, DeFi protocols, and blockchain architecture. Research-first, hype-free.
+        </p>
+      </div>
+    </div>
+
+    <!-- Back link -->
+    <div class="mt-10">
+      <a href="/blog" class="meta-text hover:text-accent transition-colors inline-flex items-center gap-2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        All articles
+      </a>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const bar = document.getElementById('reading-progress-bar')!;
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    bar.style.width = `${Math.min(pct, 100)}%`;
+  }, { passive: true });
+</script>

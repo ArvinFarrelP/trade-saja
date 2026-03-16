@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const postCount = allPosts.length;
+---
+
+<BaseLayout
+  title="About"
+  description="Arvin Farrel Pramuditya is a cryptocurrency researcher and blockchain analyst — the person behind Trade Saja, a research-first crypto education platform."
+  canonical="https://tradesaja.vercel.app/about"
+>
+
+  <!-- Structured data -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Arvin Farrel Pramuditya',
+    jobTitle: 'Cryptocurrency Researcher & Blockchain Analyst',
+    url: 'https://tradesaja.vercel.app/about',
+    description: 'Founder of Trade Saja. Focused on privacy technology, DeFi protocols, and blockchain architecture.',
+    worksFor: { '@type': 'Organization', name: 'Trade Saja', url: 'https://tradesaja.vercel.app' },
+  })} />
+
+  <!-- Page hero -->
+  <div class="border-b border-border">
+    <div class="max-w-6xl mx-auto px-6 pt-16 pb-12">
+      <span class="eyebrow mb-5 inline-flex">The Author</span>
+      <h1 class="font-mono font-bold text-[2rem] sm:text-[2.75rem] tracking-tight text-content-primary mb-3">About</h1>
+      <p class="text-content-secondary max-w-xl">The person behind Trade Saja and the mission driving this platform.</p>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="max-w-6xl mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-14">
+
+      <!-- ── Sidebar ── -->
+      <aside>
+        <div class="lg:sticky lg:top-24">
+          <!-- Avatar -->
+          <div class="w-full max-w-[200px] aspect-square bg-gradient-to-br from-bg-card to-bg-secondary
+                      border border-border rounded-2xl flex items-center justify-center mb-6
+                      relative overflow-hidden">
+            <div class="absolute inset-0"
+                 style="background: radial-gradient(ellipse at 30% 30%, rgba(59,130,246,0.1) 0%, transparent 60%);">
+            </div>
+            <span class="relative font-mono font-bold text-5xl text-accent">AFP</span>
+          </div>
+
+          <h2 class="font-mono font-bold text-lg text-content-primary mb-1">Arvin Farrel Pramuditya</h2>
+          <p class="font-mono text-[0.6875rem] text-content-muted uppercase tracking-widest mb-6">
+            Crypto Researcher · Blockchain Analyst
+          </p>
+
+          <!-- Social links -->
+          <div class="flex flex-col gap-2">
+            {[
+              {
+                href: 'https://twitter.com/',
+                label: 'Twitter / X',
+                icon: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z',
+              },
+              {
+                href: 'https://github.com/',
+                label: 'GitHub',
+                icon: 'M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z',
+              },
+              {
+                href: 'https://linkedin.com/',
+                label: 'LinkedIn',
+                icon: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z',
+              },
+              {
+                href: 'mailto:arvin@tradesaja.com',
+                label: 'arvin@tradesaja.com',
+                icon: null,
+                isEmail: true,
+              },
+            ].map(({ href, label, icon, isEmail }) => (
+              <a
+                href={href}
+                target={!isEmail ? '_blank' : undefined}
+                rel={!isEmail ? 'noopener noreferrer' : undefined}
+                class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg
+                       bg-bg-card border border-border text-sm text-content-secondary
+                       hover:border-accent hover:text-content-primary hover:bg-accent/[0.06]
+                       transition-all duration-150"
+              >
+                {icon ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="shrink-0">
+                    <path d={icon} />
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <polyline points="22,4 12,13 2,4"/>
+                  </svg>
+                )}
+                <span class="truncate">{label}</span>
+              </a>
+            ))}
+          </div>
+
+          <!-- Quick stats -->
+          <div class="mt-6 grid grid-cols-2 gap-3">
+            {[
+              [String(postCount), 'Articles'],
+              ['2024', 'Since'],
+            ].map(([n, l]) => (
+              <div class="bg-bg-card border border-border rounded-lg px-4 py-3 text-center">
+                <p class="font-mono font-bold text-xl text-content-primary leading-none mb-1">{n}</p>
+                <p class="font-mono text-[0.625rem] text-content-muted uppercase tracking-widest">{l}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── Main text ── -->
+      <div class="prose prose-invert
+                  prose-headings:font-mono prose-headings:tracking-tight
+                  prose-p:text-content-secondary prose-p:leading-[1.85]
+                  prose-strong:text-content-primary
+                  prose-li:text-content-secondary
+                  max-w-none">
+
+        <h2>Hello, I'm Arvin.</h2>
+
+        <p>
+          I'm a cryptocurrency researcher and blockchain analyst based in Indonesia, and the founder of
+          <strong>Trade Saja</strong> — a platform dedicated to making complex blockchain technology
+          and crypto economics genuinely accessible to curious, serious readers.
+        </p>
+
+        <p>
+          My journey into crypto started in 2017, when Bitcoin's first major bull run drew me in
+          not as a get-rich-quick opportunity, but as a genuinely fascinating technological and
+          economic experiment. I spent the next several years going deep: reading whitepapers,
+          running nodes, participating in DeFi protocols, and trying to understand what blockchains
+          can and can't do — not what the hype says they can do.
+        </p>
+
+        <p>
+          What I found was a field full of extraordinary innovation buried under layers of
+          speculation, marketing, and misinformation. Trade Saja is my attempt to cut through
+          that — to write about cryptocurrency the way I wish someone had written about it when
+          I was starting out.
+        </p>
+
+        <h2>What This Platform Is About</h2>
+
+        <p>Trade Saja is a research-first crypto education blog. That means:</p>
+
+        <ul>
+          <li><strong>No price predictions.</strong> Markets are uncertain. I won't pretend otherwise.</li>
+          <li><strong>First principles over narratives.</strong> Every claim traces back to how the technology actually works.</li>
+          <li><strong>Nuance over tribalism.</strong> Every protocol has trade-offs. Understanding them matters more than picking sides.</li>
+          <li><strong>Accessible depth.</strong> Complex ideas deserve clear explanations — not dumbed down, but carefully explained.</li>
+        </ul>
+
+        <h2>Areas of Focus</h2>
+      </div>
+
+      <!-- Expertise grid (outside prose to control layout) -->
+      <div class="lg:col-start-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 mb-12">
+          {[
+            { icon: '🔐', name: 'Privacy Technology',    desc: 'Ring signatures, ZK-proofs, stealth addresses, and the cryptography of financial privacy.' },
+            { icon: '⚡', name: 'DeFi Protocols',        desc: 'AMMs, lending protocols, yield optimization, and decentralized exchange mechanics.' },
+            { icon: '🔗', name: 'Blockchain Architecture',desc: 'Consensus mechanisms, Layer 2 solutions, cross-chain bridges, and scalability trade-offs.' },
+            { icon: '₿', name: 'Bitcoin Research',       desc: 'Lightning Network, on-chain analytics, UTXO model, and Bitcoin\'s economic design.' },
+            { icon: '🌐', name: 'Web3 & DAOs',           desc: 'Decentralized governance, tokenomics design, and the future of organizational structures.' },
+            { icon: '📊', name: 'Market Structure',      desc: 'On-chain data analysis, market microstructure, and macro cycles in crypto markets.' },
+          ].map(({ icon, name, desc }) => (
+            <div class="bg-bg-card border border-border rounded-xl p-5 hover:border-border-light transition-colors">
+              <div class="text-2xl mb-3">{icon}</div>
+              <p class="font-mono font-bold text-sm text-content-primary mb-2">{name}</p>
+              <p class="text-xs text-content-muted leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Philosophy section -->
+        <div class="prose prose-invert
+                    prose-headings:font-mono prose-headings:tracking-tight
+                    prose-p:text-content-secondary prose-p:leading-[1.85]
+                    prose-strong:text-content-primary
+                    max-w-none">
+          <h2>My Philosophy</h2>
+          <p>
+            I believe the most important thing a crypto researcher can do is be honest about uncertainty.
+            The space is full of confident voices making confident predictions. Most of them are wrong
+            most of the time.
+          </p>
+          <p>
+            What I try to offer instead is clear-eyed analysis of how things work, what the trade-offs
+            are, and what questions remain genuinely open. If after reading an article on Trade Saja
+            you feel better equipped to think about the problem yourself — rather than just having been
+            told what to think — then I've done my job.
+          </p>
+          <p>
+            I write every article here myself. No guest posts, no sponsored content, no affiliate links.
+            Just research.
+          </p>
+        </div>
+
+        <!-- CTA box -->
+        <div class="mt-10 p-7 bg-bg-card border-l-[3px] border-l-accent border border-border
+                    rounded-r-xl">
+          <p class="font-mono font-bold text-sm text-content-primary mb-2">Want to read the research?</p>
+          <p class="text-sm text-content-secondary mb-5 leading-relaxed">
+            Start with the featured article on Monero's privacy architecture, or browse all articles in the blog.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a href="/blog/monero-privacy" class="btn-primary !text-sm">Read Featured Article →</a>
+            <a href="/blog"                class="btn-outline !text-sm">Browse All Articles</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</BaseLayout>

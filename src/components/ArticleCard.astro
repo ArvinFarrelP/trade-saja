@@ -1,0 +1,69 @@
+---
+interface Props {
+  title:       string;
+  description: string;
+  slug:        string;
+  pubDate:     Date;
+  readingTime: string;
+  category:    string;
+  tags:        string[];
+  featured?:   boolean;
+}
+
+const { title, description, slug, pubDate, readingTime, category, tags, featured } = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'short', day: 'numeric',
+});
+---
+
+<article class="article-card group">
+  <!-- Top accent line handled by CSS -->
+  <div class="flex flex-col h-full">
+    <div class="flex items-start gap-3 mb-3">
+      <span class="category-badge">{category}</span>
+      {featured && (
+        <span class="inline-flex items-center gap-1 font-mono text-[0.6875rem] font-bold uppercase tracking-widest text-amber-400 bg-amber-400/[0.07] border border-amber-400/20 rounded px-2 py-0.5">
+          ★ Featured
+        </span>
+      )}
+    </div>
+
+    <h2 class="font-mono font-bold text-[1.0625rem] leading-snug text-content-primary mb-2.5 group-hover:text-white transition-colors">
+      <a href={`/blog/${slug}`} class="block stretched-link">
+        {title}
+      </a>
+    </h2>
+
+    <p class="text-sm text-content-secondary leading-relaxed mb-5 flex-1
+              line-clamp-3">
+      {description}
+    </p>
+
+    <div class="mt-auto">
+      <!-- Tags -->
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          {tags.slice(0, 3).map(tag => (
+            <span class="tag-pill">{tag}</span>
+          ))}
+        </div>
+      )}
+
+      <!-- Meta -->
+      <div class="meta-text">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <span class="meta-dot"></span>
+        <span>{readingTime}</span>
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .stretched-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+</style>
